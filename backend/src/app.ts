@@ -43,6 +43,11 @@ export function createApp(store: TaskStore = new TaskStore()) {
     res.json(task);
   });
 
+  app.post('/api/tasks/clear-completed', (_req: Request, res: Response) => {
+    const cleared = store.clearCompleted();
+    res.json({ cleared });
+  });
+
   app.delete('/api/tasks/:id', (req: Request, res: Response) => {
     const removed = store.remove(req.params.id);
     if (!removed) {

@@ -49,6 +49,20 @@ describe('Tasks API', () => {
     expect(res.status).toBe(404);
   });
 
+  it('clears completed tasks', async () => {
+    const a = await request(app).post('/api/tasks').send({ title: 'a' });
+    await request(app).post('/api/tasks').send({ title: 'b' });
+    await request(app).patch(`/api/tasks/${a.body.id}`).send({ done: true });
+
+    const res = await request(app).post('/api/tasks/clear-completed');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ cleared: 1 });
+
+    const list = await request(app).get('/api/tasks');
+    expect(list.body).toHaveLength(1);
+    expect(list.body[0].title).toBe('b');
+  });
+
   it('deletes a task', async () => {
     const created = await request(app).post('/api/tasks').send({ title: 'Delete me' });
     const id = created.body.id;

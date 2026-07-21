@@ -36,4 +36,9 @@ export const api = {
     fetch(`${BASE}/tasks/${id}`, { method: 'DELETE' }).then((r) => {
       if (!r.ok) throw new Error(`delete failed with ${r.status}`);
     }),
+
+  clearCompleted: () =>
+    fetch(`${BASE}/tasks/clear-completed`, { method: 'POST' }).then((r) =>
+      json<{ cleared: number }>(r),
+    ),
 };

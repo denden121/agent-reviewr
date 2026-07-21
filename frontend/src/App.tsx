@@ -48,7 +48,13 @@ export function App() {
     }
   }
 
+  async function handleClearCompleted() {
+    await api.clearCompleted();
+    setTasks((prev) => prev.filter((t) => !t.done));
+  }
+
   const remaining = tasks.filter((t) => !t.done).length;
+  const hasCompleted = tasks.some((t) => t.done);
 
   return (
     <main className="container">
@@ -72,6 +78,12 @@ export function App() {
         <p className="empty">Loading…</p>
       ) : (
         <TaskList tasks={tasks} onToggle={handleToggle} onDelete={handleDelete} />
+      )}
+
+      {hasCompleted && (
+        <button className="clear-completed" onClick={handleClearCompleted}>
+          Clear completed
+        </button>
       )}
     </main>
   );
