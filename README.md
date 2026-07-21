@@ -59,10 +59,13 @@ review comment. It authenticates to GitHub with the built-in `GITHUB_TOKEN`.
 
 ### Required secret
 
-The agent needs an LLM API key. Add it once as a repository secret:
+The agent needs an LLM API key. This project uses **Google Gemini** (free tier).
+Get a key at <https://aistudio.google.com/apikey> and add it once as a repo secret:
 
 ```bash
-gh secret set ANTHROPIC_API_KEY --repo <owner>/agent-reviewr
+gh secret set GEMINI_API_KEY --repo <owner>/agent-reviewr
 ```
 
-Without this secret the review job cannot call the model.
+Without this secret the review job cannot call the model. To use a different
+provider, change `model:` and the `env:` key in
+`.github/workflows/opencode-review.yml`.
