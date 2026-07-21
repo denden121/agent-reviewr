@@ -30,10 +30,10 @@ jobs:
       - name: opencode review
         uses: anomalyco/opencode/github@latest
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: anthropic/claude-sonnet-4-20250514
+          model: google/gemini-2.5-flash
           use_github_token: true
           prompt: |
             You are reviewing this pull request. Post a single, concise review comment.
