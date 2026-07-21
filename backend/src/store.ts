@@ -56,6 +56,18 @@ export class TaskStore {
     return this.tasks.delete(id);
   }
 
+  /** Removes all completed tasks and returns how many were cleared. */
+  clearCompleted(): number {
+    let cleared = 0;
+    for (const [id, task] of this.tasks) {
+      if (task.done) {
+        this.tasks.delete(id);
+        cleared += 1;
+      }
+    }
+    return cleared;
+  }
+
   clear(): void {
     this.tasks.clear();
   }
