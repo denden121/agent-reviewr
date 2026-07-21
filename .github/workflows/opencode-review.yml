@@ -36,10 +36,11 @@ jobs:
           model: opencode/big-pickle
           use_github_token: true
           prompt: |
-            You are reviewing this pull request. Post a single, concise review comment.
+            You are reviewing this pull request. Post a GitHub review with INLINE
+            comments anchored to specific lines of the diff — not one big comment.
 
-            IMPORTANT: Write the entire review in Russian (на русском языке).
-            Keep code identifiers, file paths, and code snippets in their original form.
+            IMPORTANT: Write everything in Russian (на русском языке). Keep code
+            identifiers, file paths, and code snippets in their original form.
 
             Focus on:
             - Correctness bugs and edge cases (empty input, error paths, async races).
@@ -48,5 +49,33 @@ jobs:
             - Test coverage gaps for the changed code.
             - Readability and maintainability, but keep nits brief.
 
-            Ground every point in the actual diff. Reference file paths and line
-            numbers. If the change looks good, say so clearly instead of inventing issues.
+            Ground every point in the actual diff. If the change looks good, say so
+            clearly in the summary instead of inventing issues.
+
+            HOW TO POST THE REVIEW (inline comments on specific lines):
+            1. The GitHub CLI `gh` is installed and authenticated via the GITHUB_TOKEN
+               environment variable. Determine the repo and PR number from the event:
+                 REPO="$GITHUB_REPOSITORY"
+                 PR=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+            2. Inspect the diff to find valid line numbers to comment on:
+                 gh pr diff "$PR" --repo "$REPO"
+               Only anchor a comment to a line that appears in this diff. Use the NEW
+               file line number and side "RIGHT" for added/context lines; use side
+               "LEFT" only for removed lines.
+            3. Create ONE review carrying all inline comments. Build a JSON payload and
+               submit it with `gh api`. Example shape (replace with your findings):
+                 cat > /tmp/review.json <<'JSON'
+                 {
+                   "event": "COMMENT",
+                   "body": "Краткое резюме ревью на русском.",
+                   "comments": [
+                     { "path": "frontend/src/App.tsx", "line": 52, "side": "RIGHT",
+                       "body": "Замечание к этой строке на русском." }
+                   ]
+                 }
+                 JSON
+                 gh api --method POST "repos/$REPO/pulls/$PR/reviews" --input /tmp/review.json
+            4. Put file-specific findings as inline `comments`; put only the overall
+               summary in the top-level `body`. If a comment's line is rejected by the
+               API (not part of the diff), adjust the line to a nearby diff line and
+               retry. Post exactly one review — do not also add a separate issue comment.
