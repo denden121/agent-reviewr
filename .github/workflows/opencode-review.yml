@@ -30,10 +30,10 @@ jobs:
       - name: opencode review
         uses: anomalyco/opencode/github@latest
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: google/gemini-2.5-flash
+          model: opencode/grok-code
           use_github_token: true
           prompt: |
             You are reviewing this pull request. Post a single, concise review comment.
