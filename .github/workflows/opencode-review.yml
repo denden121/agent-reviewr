@@ -38,6 +38,9 @@ jobs:
           prompt: |
             You are reviewing this pull request. Post a single, concise review comment.
 
+            IMPORTANT: Write the entire review in Russian (на русском языке).
+            Keep code identifiers, file paths, and code snippets in their original form.
+
             Focus on:
             - Correctness bugs and edge cases (empty input, error paths, async races).
             - Security issues (input validation, injection, unsafe data handling).
