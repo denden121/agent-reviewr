@@ -1,0 +1,100 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1d1d1f;
+    color: #f5f5f7;
+  }
+}
+
+.container {
+  max-width: 32rem;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  margin-top: 0;
+  opacity: 0.6;
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.add-form input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.add-form button,
+.task .delete {
+  cursor: pointer;
+}
+
+.add-form button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #0071e3;
+  color: white;
+  font-size: 1rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.task label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.task.done span {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.task .delete {
+  border: none;
+  background: transparent;
+  color: #d11;
+  font-size: 1rem;
+}
+
+.empty {
+  opacity: 0.6;
+}
+
+.error {
+  color: #d11;
+}

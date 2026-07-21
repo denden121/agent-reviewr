@@ -1,0 +1,19 @@
+{
+  "name": "agent-reviewr",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack Tasks app (Express API + React UI) with an opencode AI reviewer running on every pull request",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspace backend & npm run dev --workspace frontend"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

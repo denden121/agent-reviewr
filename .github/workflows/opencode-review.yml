@@ -1,0 +1,49 @@
+name: opencode-review
+
+# Runs the opencode AI agent as an automatic code reviewer on every pull request.
+# Docs: https://opencode.ai/docs/github/
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# Do not run more than one review per PR at a time; cancel superseded runs.
+concurrency:
+  group: opencode-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Skip drafts to avoid spending tokens on unfinished work.
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: opencode review
+        uses: anomalyco/opencode/github@latest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          model: anthropic/claude-sonnet-4-20250514
+          use_github_token: true
+          prompt: |
+            You are reviewing this pull request. Post a single, concise review comment.
+
+            Focus on:
+            - Correctness bugs and edge cases (empty input, error paths, async races).
+            - Security issues (input validation, injection, unsafe data handling).
+            - API contract consistency between the Express backend and the React frontend.
+            - Test coverage gaps for the changed code.
+            - Readability and maintainability, but keep nits brief.
+
+            Ground every point in the actual diff. Reference file paths and line
+            numbers. If the change looks good, say so clearly instead of inventing issues.
