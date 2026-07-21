@@ -49,8 +49,12 @@ export function App() {
   }
 
   async function handleClearCompleted() {
-    await api.clearCompleted();
-    setTasks((prev) => prev.filter((t) => !t.done));
+    try {
+      await api.clearCompleted();
+      setTasks((prev) => prev.filter((t) => !t.done));
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }
 
   const remaining = tasks.filter((t) => !t.done).length;
