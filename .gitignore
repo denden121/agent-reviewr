@@ -7,3 +7,4 @@ coverage/
 .env.*
 .DS_Store
 .opencode/
+.claude/settings.local.json
